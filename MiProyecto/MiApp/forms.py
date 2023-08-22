@@ -82,3 +82,6 @@ class ProfesorForm(forms.ModelForm):
     def clean_email(self):
         email = self.cleaned_data['email']
         return email
+class BusquedaForm(forms.Form):
+    termino_busqueda = forms.CharField(label='Término de Búsqueda', max_length=100, required=False)
+

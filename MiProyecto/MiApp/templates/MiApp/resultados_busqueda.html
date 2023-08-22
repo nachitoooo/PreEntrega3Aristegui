@@ -1,0 +1,43 @@
+{% extends 'MiApp/padre.html' %}
+
+{% block contenido %}
+<h2>Búsqueda</h2>
+<form method="post">
+  {% csrf_token %}
+  <input type="text" name="termino_busqueda" placeholder="Escribe tu búsqueda aquí">
+  <button type="submit">Buscar</button>
+</form>
+
+{% if request.method == 'POST' %}
+  {% if resultados_profesores %}
+    <h3>Resultados de Profesores</h3>
+    <ul>
+      {% for profesor in resultados_profesores %}
+        <li>{{ profesor.nombre }} {{ profesor.apellido }} - {{ profesor.email }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if resultados_directores %}
+    <h3>Resultados de Directores</h3>
+    <ul>
+      {% for director in resultados_directores %}
+        <li>{{ director.nombre }} {{ director.apellido }} - {{ director.email }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if resultados_preceptores %}
+    <h3>Resultados de Preceptores</h3>
+    <ul>
+      {% for preceptor in resultados_preceptores %}
+        <li>{{ preceptor.nombre }} {{ preceptor.apellido }} - {{ preceptor.email }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if not resultados_profesores and not resultados_directores and not resultados_preceptores %}
+    <p>No se encontraron resultados para tu búsqueda.</p>
+  {% endif %}
+{% endif %}
+{% endblock %}

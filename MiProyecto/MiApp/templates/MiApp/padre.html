@@ -22,12 +22,14 @@
 
     </head>
     <body>
+        {% block contenido %}
         <!-- Navigation-->
         <nav class="navbar navbar-light bg-light static-top">
             <div class="container">
                 <a class="btn btn-primary" href="{% url "insertar_profesor" %}">Profesor</a>
                 <a class="btn btn-primary" href="{% url "insertar_preceptor" %}">Preceptor</a>
                 <a class="btn btn-primary" href="{% url "insertar_director" %}">Director</a>
+                <a class="btn btn-primary" href="{% url "resultados_busqueda" %}">Buscar</a>
 
             </div>
         </nav>
@@ -88,5 +90,6 @@
         <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
         <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+        {% endblock %}
     </body>
 </html>

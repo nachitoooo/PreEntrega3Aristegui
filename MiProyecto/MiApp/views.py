@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Profesor, Director, Preceptor
-from .forms import ProfesorForm, DirectorForm, PreceptorForm
+from .forms import ProfesorForm, DirectorForm, PreceptorForm, BusquedaForm
 
 def insertar_profesor(request):
     if request.method == 'POST':
@@ -21,7 +21,8 @@ def insertar_director(request):
             return redirect('exito')
     else:
         form = DirectorForm()
-    return render(request, 'insertar_director.html', {'form': form})
+    return render(request, 'MiApp/insertar_director.html', {'form': form})
+
 
 def insertar_preceptor(request):
     if request.method == 'POST':
@@ -31,27 +32,36 @@ def insertar_preceptor(request):
             return redirect('exito')
     else:
         form = PreceptorForm()
-    return render(request, 'insertar_preceptor.html', {'form': form})
+    return render(request, 'MiApp/insertar_preceptor.html',{'form':form})
 
 def exito(request):
     return render(request, 'exito.html')
 
 def resultados_busqueda(request):
+    form = BusquedaForm()
+    resultados_profesores = []
+    resultados_directores = []
+    resultados_preceptores = []
+
     if request.method == 'POST':
-        termino_busqueda = request.POST.get('termino_busqueda', '') 
+        form = BusquedaForm(request.POST)
+        if form.is_valid():
+            termino_busqueda = form.cleaned_data['termino_busqueda']
+            resultados_profesores = Profesor.objects.filter(
+                nombre__icontains=termino_busqueda)
+            resultados_directores = Director.objects.filter(
+                nombre__icontains=termino_busqueda)
+            resultados_preceptores = Preceptor.objects.filter(
+                nombre__icontains=termino_busqueda)
 
-        resultados_profesores = Profesor.objects.filter(nombre__icontains=termino_busqueda)
-        resultados_directores = Director.objects.filter(nombre__icontains=termino_busqueda)
-        resultados_preceptores = Preceptor.objects.filter(nombre__icontains=termino_busqueda)
+    context = {
+        'form': form,
+        'resultados_profesores': resultados_profesores,
+        'resultados_directores': resultados_directores,
+        'resultados_preceptores': resultados_preceptores,
+    }
 
-        context = {
-            'resultados_profesores': resultados_profesores,
-            'resultados_directores': resultados_directores,
-            'resultados_preceptores': resultados_preceptores,
-        }
-        return render(request, 'resultados_busqueda.html', context)
-    else:
-        return render(request, 'busqueda.html')
+    return render(request, 'MiApp/resultados_busqueda.html',context)
 
 def vista_padre(request):
     return render(request, 'MiApp/padre.html')
@@ -62,5 +72,10 @@ def vista_profesor(request):
 def vista_director(request):
     return render(request, 'MiApp/insertar_director.html')
 
+def vista_preceptor(request):
+    return render(request, 'MiApp/insertar_preceptor.html')
+
 def inicio(request):
     return render(request, 'MiApp/inicio.html')
+def exito(request):
+    return render(request, 'MiApp/exito.html')
